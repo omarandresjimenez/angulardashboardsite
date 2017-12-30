@@ -20,7 +20,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import { APP_CONFIG} from '../app-config';
 import {DialogService} from './dialog-service';
-import {LoginService} from '../../views/pages/login/login.service';
+
 
 /**
  * Dashboard API service
@@ -35,84 +35,16 @@ export class ApiService {
     private http: Http,
     private router: Router,
     private dialog: DialogService,
-    private loginService: LoginService
   ) {
   }
 
-  /**
-   * Load image convert to data url.
-   *
-   * @example
-   *
-   *     class MyService {
-   *
-   *       public constructor(
-   *         private api: ApiService,
-   *       ) {
-   *       }
-   *
-   *       public doSomething() {
-   *         const logoImageUrl = 'http://..../logo.jpg';
-   *
-   *         this.api
-   *             .loadImageAsDataUrl(logoImageUrl)
-   *             .subscribe((logoImageDataUrl: string) => {
-   *
-   *               console.log(logoImageDataUrl); // data:image/jpeg;base64, ...
-   *
-   *             });
-   *       }
-   *
-   *     }
-   *
-   * @param url
-   * @return string that is data url
-   */
-  public loadImageAsDataUrl(url: string): Observable<string> {
-    return this
-      .http
-      .get(url, { responseType: ResponseContentType.Blob })
-      .switchMap((res: Response) => Observable.create((subscriber: Subscriber<string>) => {
-        const reader = new FileReader();
-        reader.addEventListener(
-          'load',
-          () => subscriber.next(reader.result) && subscriber.complete(),
-        );
-        reader.addEventListener('error', (err) => subscriber.error(err));
-        reader.readAsDataURL(res.blob());
-      }))
-      .catch((err) => {
-        console.log('ApiService#loadImageAsUrl(%s): ', url, err);
-        return Observable.throw(err);
-      });
-  } // end loadImageAsDataUrl()
+
 
    public apiUrl(method: string, service: boolean = false): string {
-    if (!this.loginService.isLoggedIn$.asObservable().take(1)) {
-      return `${APP_CONFIG.apiBaseUrl}${APP_CONFIG.apiVersion}${method}`;
-    }
-    const auth     = this.authService.getCurrentUser();
-    this.api_url = `${auth.settings.apiUrl}${method}?`
-      + [
-        `auth_key=${auth.auth_key}`,
-        `session_id=${auth.session_id}`,
-      ].join('&');
 
-    if (this.authService.isCrossLogin()) {
-      this.api_url = `${this.api_url}&master_slno=${this.authService.getSupportUser().Slno}`;
-      this.service_api_url = `${auth.settings.apiUrl}${method}?`
-        + [
-          `auth_key=${this.authService.getSupportUser().auth_key}`,
-          `session_id=${auth.session_id}`,
-          `master_slno=${this.authService.getSupportUser().Slno}`,
-        ].join('&');
-
-      // service should be true if you would like to get/send info as parent user
-      if (service) {
-        return this.service_api_url;
-      }
-    }
-
+ //   const auth     = this.loginService.currentuser;
+  //  this.api_url = `${APP_CONFIG.apiBaseUrl}${APP_CONFIG.apiVersion}${method}`;
+     this.api_url = `${method}`;
     return this.api_url;
   } // end apiUrl()
 
@@ -188,14 +120,14 @@ export class ApiService {
     try {
       jsonError = error.json();
     } catch (e) {
-      if (ENV === 'development') {
+
         console.warn('Can not parse response json');
-      }
+
     }
 
     if (error.status === 401) {
-      this.authService.clearUser();
-      this.router.navigate([ '/login' ]);
+      // this.loginService.logOut();
+      console.log ('session timeout');
     }
 
     return Promise.reject(jsonError);

@@ -15,7 +15,7 @@ export class LoginRouteGuardService implements CanActivate {
   }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return this.loginService.isLoggedIn$.asObservable().take(1);
+    return this.loginService.isLoggedIn;
   }
 
 

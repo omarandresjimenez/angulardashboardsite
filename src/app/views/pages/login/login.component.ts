@@ -6,10 +6,16 @@ import {LoginService} from './login.service';
   templateUrl: 'login.component.html'
 })
 export class LoginComponent {
+  private error: string;
 public constructor(private loginService: LoginService) {
 }
 public onLogIn(userName: string, password: string): void {
-    this.loginService.logIn(userName, password);
+    const resp = this.loginService.logIn(userName, password);
+    if (resp === '') {
+      this.error = 'error';
+    } else {
+      this.error = '';
+    }
 }
 
 

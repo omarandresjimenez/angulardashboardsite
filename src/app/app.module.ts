@@ -68,9 +68,13 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { LoginComponent } from './views/pages/login/login.component';
 import { LoginService} from './views/pages/login/login.service';
 import {HttpClient} from '@angular/common/http';
+import {ApiService} from './share/services/api-service';
+import {Http, HttpModule} from '@angular/http';
+import {DialogService} from './share/services/dialog-service';
 
 @NgModule({
   imports: [
+    HttpModule,
     BrowserModule,
     AppRoutingModule,
     BsDropdownModule.forRoot(),
@@ -91,6 +95,8 @@ import {HttpClient} from '@angular/common/http';
   },
     LoginService,
     HttpClient,
+    ApiService,
+    DialogService
   ],
   bootstrap: [ AppComponent ]
 })
