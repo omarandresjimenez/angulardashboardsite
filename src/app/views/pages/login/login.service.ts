@@ -26,7 +26,7 @@ public logIn(user: string, password: string): string {
   params.push({ key: 'name', value: user });
   params.push({ key: 'apikey', value: this.apiKey });
   params.push({ key: 'ts', value: ts });
-  params.push({ key: 'hash', value: md5(ts + this.apiKey + this.privateKey) });
+  // params.push({ key: 'hash', value: md5(ts + this.apiKey + this.privateKey) });
 
    this
     .apiservice
