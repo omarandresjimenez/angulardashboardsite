@@ -5,7 +5,7 @@ import { Observable, BehaviorSubject} from 'rxjs/Rx';
 import {Router} from '@angular/router';
 import {AuthUser} from '../../../share/model/auth-user';
 import {ApiService} from '../../../share/services/api-service';
-
+import {md5} from '../../../share/util/md5';
 
 @Injectable()
 export class LoginService {
@@ -17,23 +17,23 @@ private apiKey = '243ed9c9fb5e9ac1342c197d091ecf29';
 private privateKey = 'a92bf87be61a7e3b77a6a507d284bbe574c33eff';
   constructor(private route: Router, private apiservice: ApiService) {
   }
-
 public logIn(user: string, password: string): string {
   // return  this._http.get();
   // return Observable.create(true);
   const params: any = [];
-  const ts = new Date();
+  const ts = new Date().getTime();
   params.push({ key: 'name', value: user });
   params.push({ key: 'apikey', value: this.apiKey });
   params.push({ key: 'ts', value: ts });
-  // params.push({ key: 'hash', value: md5(ts + this.apiKey + this.privateKey) });
+  params.push({ key: 'hash', value: md5(ts  + this.privateKey + this.apiKey) });
 
    this
     .apiservice
-    .call('GET', 'https://gateway.marvel.com:443/v1/public/characters', params)
+    .call('GET', 'https://gateway.marvel.com:443/v1/public/characters?', params)
     .then((response) => {
       if (response && response.data.count > 0) {
         this.currentuser = {userName: user,
+                            userMail: '',
                             userAvatar: response.data.results[0].thumbnail.path + '/portrait_xlarge.jpg',
                             isLoggedIn: true,
                             authKey: '123'};

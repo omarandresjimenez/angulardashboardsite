@@ -10,6 +10,7 @@ export class LoginComponent {
 public constructor(private loginService: LoginService) {
 }
 public onLogIn(userName: string, password: string): void {
+  console.log(userName);
     const resp = this.loginService.logIn(userName, password);
     if (resp === '') {
       this.error = 'error';

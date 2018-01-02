@@ -19,7 +19,7 @@
                 <div class="danger" *ngIf="error">  Invalid username or password</div>
               <div class="row">
                 <div class="col-6">
-                  <button type="button" class="btn btn-primary px-4" (click)="onLogIn(frmlogin.username,  frmlogin.pwd)">Login</button>
+                  <button type="button" class="btn btn-primary px-4" (click)="onLogIn(frmlogin.username.value,  frmlogin.pwd.value)">Login</button>
                 </div>
                 <div class="col-6 text-right">
                   <button type="button" class="btn btn-link px-0">Forgot your password?</button>
